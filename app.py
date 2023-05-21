@@ -84,5 +84,17 @@ class UpdateEmployee(Resource):
 api.add_resource(UpdateEmployee, '/update/<int:id>') 
 
 
+#DELETE request
+class DeleteEmployee(Resource):
+    def delete(self, id):
+        emp = Employee.query.get(id)
+        if emp is None:
+            return {"error": "not found"}, 404 
+        db.session.delete(emp)
+        db.session.commit()
+        return f'{id} is deleted', 200 
+    
+api.add_resource(DeleteEmployee, '/delete/<int:id>') 
+
 if __name__ == "__main__":
     app.run(port="5000", debug=True)
