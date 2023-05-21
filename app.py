@@ -64,6 +64,25 @@ class AddEmployee(Resource):
 api.add_resource(AddEmployee, '/add')
 
 
+#PUT request
+class UpdateEmployee(Resource):
+    def put(self, id):
+        if request.is_json:
+            emp = Employee.query.get(id)
+            if emp is None:
+                return {'error': 'not found'}, 404
+            else: 
+                emp.firstname = request.json['FirstName']
+                emp.lastname = request.json['LastName']
+                emp.gender = request.json['Gender']
+                emp.salary = request.json['Salary']
+                db.session.commit()
+                return 'Updated', 200
+        else: 
+            return {'error': 'Request must be JSON'}, 400
+        
+api.add_resource(UpdateEmployee, '/update/<int:id>') 
+
 
 if __name__ == "__main__":
     app.run(port="5000", debug=True)
