@@ -36,18 +36,33 @@ class Employee(db.Model):
         return f"{self.firstname} {self.lastname} - {self.gender} - {self.salary}"
     
 
-#for GET request to http://localhost:5000/
+#GET request 
 class GetEmployee(Resource):
     def get(self):
         employees = Employee.query.all()
         emp_list = []
         for emp in employees:
-            emp_data = {'Id': emp.id, 'FirstName':emp.firstname, 'LastName': emp.lastname, 'Salary':emp.salary}
+            emp_data = {'Id': emp.id, 'FirstName':emp.firstname, 'LastName': emp.lastname, 'Gender':emp.gender, 'Salary':emp.salary}
             emp_list.append(emp_data)
         return {"Employees": emp_list}, 200
 
 
 api.add_resource(GetEmployee, '/')
+
+
+#POST request
+class AddEmployee(Resource):
+    def post(self):
+        if request.is_json:
+            emp = Employee(firstname = request.json["FirstName"], lastname = request.json["LastName"], gender = request.json["Gender"], salary = request.json["Salary"])
+            db.session.add(emp)
+            db.session.commit()
+            return make_response(jsonify({'Id': emp.id, 'FirstName': emp.firstname, 'LastName': emp.lastname, 'Gender':emp.gender, 'Salary':emp.salary}), 201)
+        else: 
+            return {'error': 'Request must be JSON'}, 400 
+
+api.add_resource(AddEmployee, '/add')
+
 
 
 if __name__ == "__main__":
