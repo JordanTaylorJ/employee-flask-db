@@ -18,8 +18,18 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///emp.db'
 db = SQLAlchemy(app)
 
 
-
 #@app.route('/')
 #def hello():
 #    return "Hello!"
 
+#add a class model
+class Employee(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    firstname = db.Column(db.String(80), nullable=False)
+    lastname = db.Column(db.String(80), nullable=False)
+    gender = db.Column(db.String(80), nullable=False)
+    salary = db.Column(db.Float)
+
+    def __repr__(self):
+        return f"{self.firstname} {self.lastname} - {self.gender} - {self.salary}"
+    
