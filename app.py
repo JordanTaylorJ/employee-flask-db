@@ -35,3 +35,20 @@ class Employee(db.Model):
     def __repr__(self):
         return f"{self.firstname} {self.lastname} - {self.gender} - {self.salary}"
     
+
+#for GET request to http://localhost:5000/
+class GetEmployee(Resource):
+    def get(self):
+        employees = Employee.query.all()
+        emp_list = []
+        for emp in employees:
+            emp_data = {'Id': emp.id, 'FirstName':emp.firstname, 'LastName': emp.lastname, 'Salary':emp.salary}
+            emp_list.append(emp_data)
+        return {"Employees": emp_list}, 200
+
+
+api.add_resource(GetEmployee, '/')
+
+
+if __name__ == "__main__":
+    app.run(port="5000", debug=True)
