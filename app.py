@@ -17,6 +17,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///emp.db'
 #sqlalchemy ORM - initialize extension 
 db = SQLAlchemy(app)
 
+#context 
+app.app_context().push()
 
 #@app.route('/')
 #def hello():
